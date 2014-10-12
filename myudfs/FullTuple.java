@@ -25,22 +25,30 @@ import org.apache.pig.data.TupleFactory;
         BagFactory mBagFactory = BagFactory.getInstance();
 
  	public DataBag exec(Tuple input) throws IOException {
-           DataBag output = mBagFactory.newDefaultBag(); 
-           int N = (Integer) input.get(0);
-           return output; 
+       DataBag inpbag = (DataBag)input.get(0);
+       int N = (Integer) input.get(1);
+       DataBag output = convertToFull( inpbag, N); 
+       return output; 
+    }
+
+    private DataBag convertToFull(DataBag first, int N) throws ExecException {
+        DataBag output = mBagFactory.newDefaultBag();
+        double[] xarr = new double [N];
+        Iterator it = first.iterator();
+        int count = 0;
+        while (it.hasNext()){
+            Tuple t = (Tuple)it.next();
+            int idx = (Integer) t.get(0);
+            xarr[idx] =  (Double) t.get(1); 
         }
 
-        private double[] initialize(DataBag first, int N) throws ExecException {
-            double[] xarr = new double [N];
-            Iterator it = first.iterator();
-            int count = 0;
-            while (it.hasNext()){
-                Tuple t = (Tuple)it.next();
-                int idx = (Integer) t.get(0);
-                System.out.println("Howdy doing idx" + t.get(0) + "vval:" +  t.get(1));
-                    xarr[idx] =  (Double) t.get(1); 
-            }
-            return xarr;
+        for(int i=0; i< N; i++){
+            Tuple t = mTupleFactory.getInstance().newTuple(2);
+            t.set(0, i );
+            t.set(1, xarr[i]);
+            output.add(t);
+        }
+        return output;
 	}
 
 }
