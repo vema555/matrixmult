@@ -1,0 +1,8 @@
+pushd myudfs
+javac -cp  pig.jar:/usr/local/hadoop/share/hadoop/common/* VecVecMultiply.java FullTuple.java
+popd
+jar -cf myudfs.jar myudfs
+
+
+
+

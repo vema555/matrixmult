@@ -1,0 +1,4 @@
+input1=/user/hduser/matrixops/xdata
+input2=/user/hduser/matrixops/ydata
+output=/user/hduser/matrixops/opdata
+
